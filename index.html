@@ -390,6 +390,59 @@ body { font-family: 'Open Sans', sans-serif; background: var(--cinza-bg); color:
 
 /* ── RESUMO MODAL ── */
 .resumo-text { background: var(--cinza-bg); border-radius: 10px; padding: 16px; font-size: 0.9rem; color: var(--texto); line-height: 1.7; }
+
+/* ── POPUP AVISO ── */
+.popup-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  z-index: 9999; display: flex; align-items: center; justify-content: center;
+  padding: 24px; animation: fadeIn 0.3s ease;
+}
+.popup-overlay.hidden { display: none; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.popup-box {
+  background: #fff; border-radius: 20px; max-width: 480px; width: 100%;
+  overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: slideUp 0.3s ease; position: relative;
+}
+@keyframes slideUp { from{transform:translateY(30px);opacity:0} to{transform:translateY(0);opacity:1} }
+.popup-header {
+  background: linear-gradient(135deg, var(--verde-escuro), var(--azul));
+  padding: 20px 24px; display: flex; align-items: center; justify-content: space-between;
+}
+.popup-header h3 {
+  font-family: 'Poppins', sans-serif; font-size: 1rem; font-weight: 700;
+  color: #fff; margin: 0;
+}
+.popup-close {
+  background: rgba(255,255,255,0.2); border: none; color: #fff;
+  width: 32px; height: 32px; border-radius: 50%; font-size: 1.1rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s; flex-shrink: 0;
+}
+.popup-close:hover { background: rgba(255,255,255,0.35); }
+.popup-body { padding: 28px 24px; text-align: center; }
+.popup-icon { font-size: 3rem; margin-bottom: 12px; }
+.popup-body h4 {
+  font-family: 'Poppins', sans-serif; font-size: 1.3rem; font-weight: 800;
+  color: var(--vermelho, #e74c3c); margin-bottom: 8px; line-height: 1.3;
+}
+.popup-body p { font-size: 0.92rem; color: var(--texto-claro); margin-bottom: 20px; line-height: 1.6; }
+.popup-date {
+  background: var(--verde-bg); border: 2px solid var(--verde); border-radius: 12px;
+  padding: 14px 20px; margin-bottom: 20px;
+}
+.popup-date .pd-label { font-size: 0.75rem; font-weight: 700; color: var(--verde); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.popup-date .pd-value { font-family: 'Poppins', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--verde-escuro); }
+.popup-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--verde); color: #fff; padding: 12px 28px;
+  border-radius: 10px; text-decoration: none; font-weight: 700;
+  font-size: 0.95rem; transition: all 0.2s; border: none; cursor: pointer;
+  width: 100%; justify-content: center; margin-bottom: 12px;
+}
+.popup-btn:hover { background: var(--verde-escuro); transform: translateY(-1px); }
+.popup-dismiss { font-size: 0.8rem; color: var(--texto-claro); cursor: pointer; background: none; border: none; text-decoration: underline; }
+.popup-dismiss:hover { color: var(--texto); }
 </style>
 </head>
 <body>
@@ -397,8 +450,8 @@ body { font-family: 'Open Sans', sans-serif; background: var(--cinza-bg); color:
 <nav class="navbar" id="navbar">
 <div class="navbar-inner">
 <a class="navbar-brand" href="#">
-<img src="Logotipo.png" alt="Logo Feira de Ciências" style="height:46px;width:auto;object-fit:contain;filter:brightness(0) invert(1) drop-shadow(0 0 2px rgba(255,255,255,0.8));background:rgba(255,255,255,0.15);border-radius:6px;padding:3px 6px;"/>
-<img src="marca_sau.png" alt="Logo IFFar Campus Santo Augusto" style="height:42px;width:auto;object-fit:contain;filter:brightness(0) invert(1);margin-left:10px;"/>
+<img src="Logotipo.png" alt="Logo Feira de Ciências" style="height:46px;width:auto;object-fit:contain;background:#ffffff;border-radius:6px;padding:3px 8px;"/>
+<a href="https://www.iffarroupilha.edu.br/santo-augusto" target="_blank"><img src="marca_sau.png" alt="Logo IFFar Campus Santo Augusto" style="height:42px;width:auto;object-fit:contain;filter:brightness(0) invert(1);margin-left:10px;"/></a>
 </a>
 <div class="navbar-links">
 <a href="#sobre">Sobre</a>
@@ -439,7 +492,7 @@ body { font-family: 'Open Sans', sans-serif; background: var(--cinza-bg); color:
 <div style="display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:28px;flex-wrap:wrap;">
 <img src="Logotipo.png" alt="Logo Feira de Ciências" style="height:80px;width:auto;object-fit:contain;background:rgba(255,255,255,0.9);border-radius:10px;padding:8px 12px;"/>
 <div style="width:1px;height:60px;background:rgba(255,255,255,0.3);"></div>
-<img src="marca_sau.png" alt="Logo IFFar Campus Santo Augusto" style="height:70px;width:auto;object-fit:contain;filter:brightness(0) invert(1);"/>
+<a href="https://www.iffarroupilha.edu.br/santo-augusto" target="_blank"><img src="marca_sau.png" alt="Logo IFFar Campus Santo Augusto" style="height:70px;width:auto;object-fit:contain;filter:brightness(0) invert(1);"/></a>
 </div>
 <div class="hero-badge">🏆 IV Edição · 2026</div>
 <h1>IV Feira de Ciências<br/><span>IFFar 2026</span></h1>
@@ -1147,6 +1200,13 @@ body { font-family: 'Open Sans', sans-serif; background: var(--cinza-bg); color:
 <!-- FOOTER -->
 <footer class="footer">
 <div class="footer-inner">
+<div style="display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:20px;">
+<img src="Logotipo.png" alt="Logo Feira de Ciências" style="height:60px;width:auto;object-fit:contain;background:rgba(255,255,255,0.9);border-radius:8px;padding:6px 10px;"/>
+<div style="width:1px;height:50px;background:rgba(255,255,255,0.2);"></div>
+<a href="https://www.iffarroupilha.edu.br/santo-augusto" target="_blank">
+<img src="marca_sau.png" alt="Logo IFFar Campus Santo Augusto" style="height:55px;width:auto;object-fit:contain;filter:brightness(0) invert(1);"/>
+</a>
+</div>
 <div class="footer-brand">🔬 IV Feira de Ciências · IFFar Campus Santo Augusto</div>
 <div class="footer-links">
 <a href="#sobre">Sobre</a>
@@ -1286,6 +1346,44 @@ function verResumo(i) {
 function fecharResumo() {
   document.getElementById('resumoOverlay').classList.remove('open');
 }
+</script>
+
+<!-- POPUP AVISO INSCRIÇÕES -->
+<div class="popup-overlay" id="popupAviso">
+  <div class="popup-box">
+    <div class="popup-header">
+      <h3>📢 Aviso Importante</h3>
+      <button class="popup-close" onclick="fecharPopup()">✕</button>
+    </div>
+    <div class="popup-body">
+      <div class="popup-icon">🎉</div>
+      <h4>Inscrições Prorrogadas!</h4>
+      <p>As inscrições para a <strong>IV Feira de Ciências do IFFar – Campus Santo Augusto</strong> foram prorrogadas. Não perca essa oportunidade!</p>
+      <div class="popup-date">
+        <div class="pd-label">⏰ Novo Prazo Final</div>
+        <div class="pd-value">02 de novembro de 2026</div>
+      </div>
+      <a class="popup-btn" href="https://forms.gle/Hwf6uNeqssR2P1Wz7" target="_blank">
+        🎯 Inscreva Seu Projeto Agora!
+      </a>
+      <button class="popup-dismiss" onclick="fecharPopup()">Fechar este aviso</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// POPUP
+function fecharPopup() {
+  document.getElementById('popupAviso').classList.add('hidden');
+}
+// Fechar ao clicar fora
+document.getElementById('popupAviso').addEventListener('click', function(e) {
+  if (e.target === this) fecharPopup();
+});
+// Fechar com ESC
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') fecharPopup();
+});
 </script>
 </body>
 </html>

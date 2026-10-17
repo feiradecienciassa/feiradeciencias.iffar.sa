@@ -469,6 +469,29 @@ body { font-family: 'Open Sans', sans-serif; background: var(--cinza-bg); color:
 .senha-erro { color: var(--vermelho, #e74c3c); font-size: 0.82rem; display: none; margin-bottom: 8px; }
 .senha-erro.show { display: block; }
 .senha-cancel { background: none; border: none; color: var(--texto-claro); font-size: 0.82rem; cursor: pointer; text-decoration: underline; }
+
+/* ── PESQUISA ANAIS ── */
+.anais-search-wrap {
+  display: flex; gap: 12px; align-items: center; margin-bottom: 20px; flex-wrap: wrap;
+}
+.anais-search-box {
+  flex: 1; min-width: 200px; display: flex; align-items: center;
+  background: #fff; border: 2px solid var(--borda); border-radius: 10px;
+  padding: 10px 16px; gap: 10px; transition: border-color 0.2s;
+}
+.anais-search-box:focus-within { border-color: var(--verde); }
+.anais-search-box input {
+  border: none; outline: none; font-size: 0.9rem; font-family: inherit;
+  color: var(--texto); width: 100%; background: transparent;
+}
+.anais-search-box .search-icon { color: var(--texto-claro); font-size: 1rem; flex-shrink: 0; }
+.anais-search-clear {
+  background: none; border: none; color: var(--texto-claro); cursor: pointer;
+  font-size: 1rem; padding: 0; display: none;
+}
+.anais-search-clear.show { display: block; }
+.anais-search-info { font-size: 0.82rem; color: var(--texto-claro); white-space: nowrap; }
+.anais-no-results { text-align: center; padding: 32px; color: var(--texto-claro); font-size: 0.9rem; }
 </style>
 </head>
 <body>
@@ -1065,6 +1088,14 @@ body { font-family: 'Open Sans', sans-serif; background: var(--cinza-bg); color:
 <span class="lock-text" id="lock-text">Área restrita — clique para acessar como administrador</span>
 </div>
 </div>
+<div class="anais-search-wrap">
+<div class="anais-search-box">
+<span class="search-icon">🔍</span>
+<input id="anais-search" type="text" placeholder="Pesquisar por título, autor ou orientador..." oninput="pesquisarAnais(this.value)"/>
+<button class="anais-search-clear" id="search-clear" onclick="limparPesquisa()">✕</button>
+</div>
+<span class="anais-search-info" id="search-info"></span>
+</div>
 <div class="anais-controls">
 <button class="anais-btn active" onclick="filtrarAnais('todos', this)">📋 Todos</button>
 <button class="anais-btn" onclick="filtrarAnais('fundamental', this)">📚 Ensino Fundamental</button>
@@ -1321,6 +1352,7 @@ function showRes(cat, btn) {
 // ── ANAIS ──
 let trabalhos = [];
 let filtroAtual = 'todos';
+let termoPesquisa = '';
 
 function filtrarAnais(cat, btn) {
   filtroAtual = cat;
@@ -1329,11 +1361,41 @@ function filtrarAnais(cat, btn) {
   renderAnais();
 }
 
+function pesquisarAnais(termo) {
+  termoPesquisa = termo.toLowerCase().trim();
+  document.getElementById('search-clear').classList.toggle('show', termoPesquisa.length > 0);
+  renderAnais();
+}
+
+function limparPesquisa() {
+  document.getElementById('anais-search').value = '';
+  termoPesquisa = '';
+  document.getElementById('search-clear').classList.remove('show');
+  document.getElementById('search-info').textContent = '';
+  renderAnais();
+}
+
 function renderAnais() {
   const tbody = document.getElementById('anaisBody');
-  const lista = filtroAtual === 'todos' ? trabalhos : trabalhos.filter(t => t.categoria === filtroAtual);
+  let lista = filtroAtual === 'todos' ? trabalhos : trabalhos.filter(t => t.categoria === filtroAtual);
+  
+  // Aplicar pesquisa
+  if (termoPesquisa) {
+    lista = lista.filter(t => 
+      t.titulo.toLowerCase().includes(termoPesquisa) ||
+      t.autores.toLowerCase().includes(termoPesquisa) ||
+      t.orientador.toLowerCase().includes(termoPesquisa)
+    );
+    document.getElementById('search-info').textContent = lista.length + ' resultado(s) encontrado(s)';
+  } else {
+    document.getElementById('search-info').textContent = '';
+  }
   if (lista.length === 0) {
+    if (termoPesquisa) {
+    tbody.innerHTML = '<tr><td class="anais-empty" colspan="7">🔍 Nenhum resultado encontrado para "<strong>' + termoPesquisa + '</strong>".<br>Tente outros termos de pesquisa.</td></tr>';
+  } else {
     tbody.innerHTML = '<tr><td class="anais-empty" colspan="7">🚫 Nenhum trabalho cadastrado ainda.<br>Clique em "Adicionar Trabalho" para inserir o primeiro.</td></tr>';
+  }
     return;
   }
   const badges = { fundamental: '<span class="badge-cat badge-fund">📚 Fund.</span>', medio: '<span class="badge-cat badge-med">🎓 Médio</span>', superior: '<span class="badge-cat badge-sup">🏛️ Superior</span>' };

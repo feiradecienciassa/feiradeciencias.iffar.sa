@@ -443,6 +443,32 @@ body { font-family: 'Open Sans', sans-serif; background: var(--cinza-bg); color:
 .popup-btn:hover { background: var(--verde-escuro); transform: translateY(-1px); }
 .popup-dismiss { font-size: 0.8rem; color: var(--texto-claro); cursor: pointer; background: none; border: none; text-decoration: underline; }
 .popup-dismiss:hover { color: var(--texto); }
+
+/* ── SISTEMA DE SENHA ANAIS ── */
+.anais-lock {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--cinza-bg); border: 1px solid var(--borda);
+  border-radius: 10px; padding: 10px 16px; margin-bottom: 16px;
+  cursor: pointer; transition: all 0.2s; width: fit-content;
+}
+.anais-lock:hover { border-color: var(--verde); background: var(--verde-bg); }
+.anais-lock .lock-icon { font-size: 1.2rem; }
+.anais-lock .lock-text { font-size: 0.85rem; font-weight: 600; color: var(--texto-claro); }
+.anais-lock.unlocked .lock-text { color: var(--verde); }
+
+.senha-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; padding: 24px; }
+.senha-modal.open { display: flex; }
+.senha-box { background: #fff; border-radius: 16px; padding: 32px; max-width: 380px; width: 100%; text-align: center; }
+.senha-box h3 { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--verde-escuro); margin-bottom: 8px; }
+.senha-box p { font-size: 0.85rem; color: var(--texto-claro); margin-bottom: 20px; }
+.senha-input-wrap { display: flex; gap: 8px; margin-bottom: 12px; }
+.senha-input-wrap input { flex: 1; padding: 10px 14px; border: 1px solid var(--borda); border-radius: 8px; font-size: 0.9rem; font-family: inherit; }
+.senha-input-wrap input:focus { outline: none; border-color: var(--verde); }
+.senha-input-wrap button { background: var(--verde); color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+.senha-input-wrap button:hover { background: var(--verde-escuro); }
+.senha-erro { color: var(--vermelho, #e74c3c); font-size: 0.82rem; display: none; margin-bottom: 8px; }
+.senha-erro.show { display: block; }
+.senha-cancel { background: none; border: none; color: var(--texto-claro); font-size: 0.82rem; cursor: pointer; text-decoration: underline; }
 </style>
 </head>
 <body>
@@ -1026,9 +1052,18 @@ body { font-family: 'Open Sans', sans-serif; background: var(--cinza-bg); color:
 <div class="section-tag">Anais do Evento</div>
 <h2>Trabalhos Inscritos</h2>
 <p>Consulte os trabalhos inscritos na IV Feira de Ciências. Use os filtros para encontrar por categoria.</p>
+<a href="https://drive.google.com/drive/folders/1DNXF2eBDMlMBYzJd_nz4VsDX1pbXSj31?usp=drive_link" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--verde-bg);border:1px solid var(--verde);color:var(--verde-escuro);padding:8px 18px;border-radius:8px;text-decoration:none;font-size:0.85rem;font-weight:600;margin-top:12px;transition:all 0.2s;">
+📁 Acessar Pasta de Resumos (Google Drive)
+</a>
 </div>
-<div class="anais-add">
+<div class="anais-add" id="anais-add-btn" style="display:none;">
 <button onclick="abrirModal()">➕ Adicionar Trabalho</button>
+</div>
+<div style="margin-bottom:16px;">
+<div class="anais-lock" id="anais-lock" onclick="abrirSenha()">
+<span class="lock-icon" id="lock-icon">🔒</span>
+<span class="lock-text" id="lock-text">Área restrita — clique para acessar como administrador</span>
+</div>
 </div>
 <div class="anais-controls">
 <button class="anais-btn active" onclick="filtrarAnais('todos', this)">📋 Todos</button>
@@ -1232,6 +1267,10 @@ body { font-family: 'Open Sans', sans-serif; background: var(--cinza-bg); color:
 </select>
 </div>
 <div class="form-group"><label>Resumo</label><textarea id="f-resumo" placeholder="Breve descrição do trabalho (opcional)"></textarea></div>
+    <div class="form-group" style="grid-column:1/-1"><label>📄 Link do Resumo em PDF (Google Drive)</label>
+      <input id="f-pdf" type="url" placeholder="Cole aqui o link do Google Drive do PDF..."/>
+      <small style="color:var(--texto-claro);font-size:0.75rem;margin-top:4px;display:block;">⚠️ Certifique-se que o PDF está compartilhado como "Qualquer pessoa com o link pode visualizar"</small>
+    </div>
 <div class="form-actions">
 <button class="btn-cancel" onclick="fecharModal()">Cancelar</button>
 <button class="btn-save" onclick="salvarTrabalho()">Salvar Trabalho</button>
@@ -1305,7 +1344,13 @@ function renderAnais() {
       <td>${t.autores}</td>
       <td>${t.orientador}</td>
       <td>${badges[t.categoria] || t.categoria}</td>
-      <td>${t.resumo ? `<button class="btn-resumo" onclick="verResumo(${trabalhos.indexOf(t)})">Ver Resumo</button>` : '<span style="color:var(--texto-claro);font-size:0.8rem">—</span>'}</td>
+      <td>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          ${t.resumo ? `<button class="btn-resumo" onclick="verResumo(${trabalhos.indexOf(t)})">📝 Resumo</button>` : ''}
+          ${t.pdfUrl ? `<a href="${t.pdfUrl}" target="_blank" class="btn-resumo" style="text-decoration:none;">📄 PDF</a>` : ''}
+          ${!t.resumo && !t.pdfUrl ? '<span style="color:var(--texto-claro);font-size:0.8rem">—</span>' : ''}
+        </div>
+      </td>
       <td><button class="btn-resumo" onclick="removerTrabalho(${trabalhos.indexOf(t)})" style="border-color:#e74c3c;color:#e74c3c">🗑️</button></td>
     </tr>
   `).join('');
@@ -1316,7 +1361,7 @@ function abrirModal() {
 }
 function fecharModal() {
   document.getElementById('modalOverlay').classList.remove('open');
-  ['f-titulo','f-autores','f-orientador','f-resumo'].forEach(id => document.getElementById(id).value = '');
+  ['f-titulo','f-autores','f-orientador','f-resumo','f-pdf'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; });
   document.getElementById('f-categoria').value = '';
 }
 function salvarTrabalho() {
@@ -1326,7 +1371,21 @@ function salvarTrabalho() {
   const categoria = document.getElementById('f-categoria').value;
   const resumo = document.getElementById('f-resumo').value.trim();
   if (!titulo || !autores || !orientador || !categoria) { alert('Preencha todos os campos obrigatórios!'); return; }
-  trabalhos.push({ titulo, autores, orientador, categoria, resumo });
+  const pdf = document.getElementById('f-pdf').value.trim();
+  // Converter link do Google Drive para link direto de visualização
+  let pdfUrl = '';
+  if (pdf) {
+    if (pdf.includes('drive.google.com/file/d/')) {
+      const fileId = pdf.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if (fileId) pdfUrl = 'https://drive.google.com/file/d/' + fileId[1] + '/preview';
+    } else if (pdf.includes('drive.google.com/open?id=')) {
+      const fileId = pdf.match(/id=([a-zA-Z0-9_-]+)/);
+      if (fileId) pdfUrl = 'https://drive.google.com/file/d/' + fileId[1] + '/preview';
+    } else {
+      pdfUrl = pdf;
+    }
+  }
+  trabalhos.push({ titulo, autores, orientador, categoria, resumo, pdfUrl });
   fecharModal();
   renderAnais();
 }
@@ -1379,6 +1438,71 @@ document.getElementById('popupAviso').addEventListener('click', function(e) {
 // Fechar com ESC
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') fecharPopup();
+});
+</script>
+
+<!-- MODAL SENHA ANAIS -->
+<div class="senha-modal" id="senhaModal">
+  <div class="senha-box">
+    <div style="font-size:2.5rem;margin-bottom:12px;">🔒</div>
+    <h3>Área Restrita</h3>
+    <p>Digite a senha de administrador para acessar as funções de edição dos anais.</p>
+    <div class="senha-input-wrap">
+      <input id="senha-input" placeholder="Digite a senha..." type="password" onkeydown="if(event.key==='Enter')verificarSenha()"/>
+      <button onclick="verificarSenha()">Entrar</button>
+    </div>
+    <div class="senha-erro" id="senha-erro">❌ Senha incorreta. Tente novamente.</div>
+    <button class="senha-cancel" onclick="fecharSenha()">Cancelar</button>
+  </div>
+</div>
+
+<script>
+// ── SISTEMA DE SENHA ANAIS ──
+const SENHA_ADMIN = 'feirasa2026';
+let adminLogado = false;
+
+function abrirSenha() {
+  if (adminLogado) {
+    // Se já logado, faz logout
+    adminLogado = false;
+    document.getElementById('anais-add-btn').style.display = 'none';
+    document.getElementById('lock-icon').textContent = '🔒';
+    document.getElementById('lock-text').textContent = 'Área restrita — clique para acessar como administrador';
+    document.getElementById('anais-lock').classList.remove('unlocked');
+    return;
+  }
+  document.getElementById('senhaModal').classList.add('open');
+  setTimeout(() => document.getElementById('senha-input').focus(), 100);
+}
+
+function verificarSenha() {
+  const senha = document.getElementById('senha-input').value;
+  if (senha === SENHA_ADMIN) {
+    adminLogado = true;
+    document.getElementById('senhaModal').classList.remove('open');
+    document.getElementById('senha-input').value = '';
+    document.getElementById('senha-erro').classList.remove('show');
+    // Mostrar botão de adicionar
+    document.getElementById('anais-add-btn').style.display = 'flex';
+    document.getElementById('lock-icon').textContent = '🔓';
+    document.getElementById('lock-text').textContent = 'Administrador conectado — clique para sair';
+    document.getElementById('anais-lock').classList.add('unlocked');
+  } else {
+    document.getElementById('senha-erro').classList.add('show');
+    document.getElementById('senha-input').value = '';
+    document.getElementById('senha-input').focus();
+  }
+}
+
+function fecharSenha() {
+  document.getElementById('senhaModal').classList.remove('open');
+  document.getElementById('senha-input').value = '';
+  document.getElementById('senha-erro').classList.remove('show');
+}
+
+// Fechar modal de senha com ESC
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') fecharSenha();
 });
 </script>
 </body>

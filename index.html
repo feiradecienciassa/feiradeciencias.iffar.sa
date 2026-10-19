@@ -492,6 +492,67 @@ body { font-family: 'Open Sans', sans-serif; background: var(--cinza-bg); color:
 .anais-search-clear.show { display: block; }
 .anais-search-info { font-size: 0.82rem; color: var(--texto-claro); white-space: nowrap; }
 .anais-no-results { text-align: center; padding: 32px; color: var(--texto-claro); font-size: 0.9rem; }
+
+/* ── POPUP CONTAGEM REGRESSIVA ── */
+.countdown-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+  z-index: 9998; display: flex; align-items: center; justify-content: center;
+  padding: 24px; animation: fadeIn 0.4s ease;
+}
+.countdown-overlay.hidden { display: none; }
+.countdown-box {
+  background: #fff; border-radius: 24px; max-width: 440px; width: 100%;
+  overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+  animation: slideUp 0.4s ease; position: relative;
+}
+.countdown-header {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  padding: 24px; text-align: center; position: relative;
+}
+.countdown-header .cd-icon { font-size: 2.5rem; margin-bottom: 8px; }
+.countdown-header h3 {
+  font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700;
+  color: #fff; margin: 0;
+}
+.countdown-close {
+  position: absolute; top: 12px; right: 16px;
+  background: rgba(255,255,255,0.2); border: none; color: #fff;
+  width: 30px; height: 30px; border-radius: 50%; font-size: 1rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.countdown-close:hover { background: rgba(255,255,255,0.35); }
+.countdown-body { padding: 28px 24px; text-align: center; }
+.countdown-days {
+  font-family: 'Poppins', sans-serif; font-size: 5rem; font-weight: 800;
+  color: #e74c3c; line-height: 1; margin-bottom: 4px;
+}
+.countdown-days-label {
+  font-size: 1rem; font-weight: 700; color: var(--texto-claro);
+  text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px;
+}
+.countdown-msg {
+  font-size: 0.95rem; color: var(--texto); margin-bottom: 20px; line-height: 1.6;
+}
+.countdown-deadline {
+  background: #fde8e8; border: 1px solid #f5b7b1; border-radius: 10px;
+  padding: 12px 16px; margin-bottom: 20px;
+}
+.countdown-deadline .cd-label { font-size: 0.75rem; font-weight: 700; color: #c0392b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.countdown-deadline .cd-date { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 800; color: #c0392b; }
+.countdown-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #e74c3c; color: #fff; padding: 12px 28px;
+  border-radius: 10px; text-decoration: none; font-weight: 700;
+  font-size: 0.95rem; transition: all 0.2s; border: none; cursor: pointer;
+  width: 100%; justify-content: center; margin-bottom: 10px;
+}
+.countdown-btn:hover { background: #c0392b; transform: translateY(-1px); }
+.countdown-dismiss {
+  font-size: 0.8rem; color: var(--texto-claro); cursor: pointer;
+  background: none; border: none; text-decoration: underline;
+}
+.countdown-dismiss:hover { color: var(--texto); }
 </style>
 </head>
 <body>
@@ -1566,6 +1627,102 @@ function fecharSenha() {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') fecharSenha();
 });
+</script>
+
+<!-- POPUP CONTAGEM REGRESSIVA INSCRIÇÕES -->
+<div class="countdown-overlay hidden" id="countdownPopup">
+  <div class="countdown-box">
+    <div class="countdown-header">
+      <button class="countdown-close" onclick="fecharCountdown()">✕</button>
+      <div class="cd-icon">⏰</div>
+      <h3>Prazo de Inscrições se Encerrando!</h3>
+    </div>
+    <div class="countdown-body">
+      <div class="countdown-days" id="cd-days">0</div>
+      <div class="countdown-days-label" id="cd-days-label">dias restantes</div>
+      <p class="countdown-msg" id="cd-msg">Não perca o prazo para inscrever seu projeto na IV Feira de Ciências do IFFar – Campus Santo Augusto!</p>
+      <div class="countdown-deadline">
+        <div class="cd-label">⏰ Prazo Final das Inscrições</div>
+        <div class="cd-date">02 de novembro de 2026</div>
+      </div>
+      <a class="countdown-btn" href="https://forms.gle/Hwf6uNeqssR2P1Wz7" target="_blank">
+        🎯 Inscreva-se Agora!
+      </a>
+      <button class="countdown-dismiss" onclick="fecharCountdown()">Fechar este aviso</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── POPUP CONTAGEM REGRESSIVA ──
+(function() {
+  const PRAZO = new Date('2026-11-02T23:59:59');
+  const DIAS_ALERTA = [10, 7, 3, 2, 1];
+  
+  function getDiasRestantes() {
+    const hoje = new Date();
+    const diff = PRAZO - hoje;
+    if (diff <= 0) return 0;
+    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+  }
+  
+  function getMensagem(dias) {
+    if (dias === 1) return 'Último dia! As inscrições se encerram hoje à meia-noite. Inscreva seu projeto agora!';
+    if (dias === 2) return 'Apenas 2 dias restantes! Não deixe para a última hora. Inscreva seu projeto!';
+    if (dias === 3) return 'Faltam apenas 3 dias para o encerramento das inscrições. Garanta sua participação!';
+    if (dias === 7) return 'Faltam 7 dias para o encerramento das inscrições. Prepare seu projeto e inscreva-se!';
+    if (dias === 10) return 'Faltam 10 dias para o encerramento das inscrições. Não perca essa oportunidade!';
+    return 'Não perca o prazo para inscrever seu projeto!';
+  }
+  
+  function getLabelDias(dias) {
+    return dias === 1 ? 'dia restante' : 'dias restantes';
+  }
+  
+  function verificarContagem() {
+    const dias = getDiasRestantes();
+    
+    // Verificar se deve mostrar o popup
+    if (!DIAS_ALERTA.includes(dias)) return;
+    
+    // Verificar se já foi fechado hoje para este número de dias
+    const chave = 'countdown_fechado_' + dias;
+    const fechadoEm = localStorage.getItem(chave);
+    if (fechadoEm) {
+      const hoje = new Date().toDateString();
+      if (fechadoEm === hoje) return; // Já foi fechado hoje
+    }
+    
+    // Mostrar popup
+    document.getElementById('cd-days').textContent = dias;
+    document.getElementById('cd-days-label').textContent = getLabelDias(dias);
+    document.getElementById('cd-msg').textContent = getMensagem(dias);
+    
+    setTimeout(() => {
+      document.getElementById('countdownPopup').classList.remove('hidden');
+    }, 2000); // Aparece 2 segundos após carregar a página
+  }
+  
+  window.fecharCountdown = function() {
+    document.getElementById('countdownPopup').classList.add('hidden');
+    // Salvar que foi fechado hoje para este número de dias
+    const dias = getDiasRestantes();
+    localStorage.setItem('countdown_fechado_' + dias, new Date().toDateString());
+  };
+  
+  // Fechar ao clicar fora
+  document.getElementById('countdownPopup').addEventListener('click', function(e) {
+    if (e.target === this) fecharCountdown();
+  });
+  
+  // Fechar com ESC
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') fecharCountdown();
+  });
+  
+  // Verificar ao carregar
+  window.addEventListener('load', verificarContagem);
+})();
 </script>
 </body>
 </html>

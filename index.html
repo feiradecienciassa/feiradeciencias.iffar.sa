@@ -1683,91 +1683,10 @@ function renderAnais() {
   `).join('');
 }
 function filtrarAnais(cat,btn){filtroAtual=cat;document.querySelectorAll('.anais-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
-// ── POPUP LISTA DE TRABALHOS ──
-function baixarListaEFechar(){
-  // Inicia download automático
-  const link = document.createElement('a');
-  link.href = 'https://drive.google.com/uc?export=download&id=1K75RQliakwgeBLj9DADFTO_ewUpqk5Dm';
-  link.download = 'Lista_Trabalhos_Inscritos_IV_Feira_Ciencias_IFFar.pdf';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  fecharPopupLista();
-}
-function fecharPopupLista(){
-  document.getElementById('popupLista').classList.remove('open');
-  sessionStorage.setItem('popupListaFechado','1');
-}
-document.getElementById('popupLista').addEventListener('click',function(e){
-  if(e.target===this)fecharPopupLista();
-});
-// Mostrar popup ao carregar (uma vez por sessão)
-window.addEventListener('load',function(){
-  if(!sessionStorage.getItem('popupListaFechado')){
-    setTimeout(function(){
-      document.getElementById('popupLista').classList.add('open');
-    },800);
-  }
-});
-
 renderAnais();}
 function pesquisarAnais(val){buscaAtual=val;
-// ── POPUP LISTA DE TRABALHOS ──
-function baixarListaEFechar(){
-  // Inicia download automático
-  const link = document.createElement('a');
-  link.href = 'https://drive.google.com/uc?export=download&id=1K75RQliakwgeBLj9DADFTO_ewUpqk5Dm';
-  link.download = 'Lista_Trabalhos_Inscritos_IV_Feira_Ciencias_IFFar.pdf';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  fecharPopupLista();
-}
-function fecharPopupLista(){
-  document.getElementById('popupLista').classList.remove('open');
-  sessionStorage.setItem('popupListaFechado','1');
-}
-document.getElementById('popupLista').addEventListener('click',function(e){
-  if(e.target===this)fecharPopupLista();
-});
-// Mostrar popup ao carregar (uma vez por sessão)
-window.addEventListener('load',function(){
-  if(!sessionStorage.getItem('popupListaFechado')){
-    setTimeout(function(){
-      document.getElementById('popupLista').classList.add('open');
-    },800);
-  }
-});
-
 renderAnais();}
 function limparPesquisa(){document.getElementById('anais-search').value='';buscaAtual='';
-// ── POPUP LISTA DE TRABALHOS ──
-function baixarListaEFechar(){
-  // Inicia download automático
-  const link = document.createElement('a');
-  link.href = 'https://drive.google.com/uc?export=download&id=1K75RQliakwgeBLj9DADFTO_ewUpqk5Dm';
-  link.download = 'Lista_Trabalhos_Inscritos_IV_Feira_Ciencias_IFFar.pdf';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  fecharPopupLista();
-}
-function fecharPopupLista(){
-  document.getElementById('popupLista').classList.remove('open');
-  sessionStorage.setItem('popupListaFechado','1');
-}
-document.getElementById('popupLista').addEventListener('click',function(e){
-  if(e.target===this)fecharPopupLista();
-});
-// Mostrar popup ao carregar (uma vez por sessão)
-window.addEventListener('load',function(){
-  if(!sessionStorage.getItem('popupListaFechado')){
-    setTimeout(function(){
-      document.getElementById('popupLista').classList.add('open');
-    },800);
-  }
-});
-
 renderAnais();}
 let popupCatAtual='todos';
 function abrirPopupTrabalhos(){
@@ -1812,63 +1731,9 @@ function salvarTrabalho(){
   trabalhosAdmin.push({titulo,autores,orientador,escola,categoria,resumo,pdfUrl});
   localStorage.setItem('trabalhosAdmin',JSON.stringify(trabalhosAdmin));
   fecharModal();
-// ── POPUP LISTA DE TRABALHOS ──
-function baixarListaEFechar(){
-  // Inicia download automático
-  const link = document.createElement('a');
-  link.href = 'https://drive.google.com/uc?export=download&id=1K75RQliakwgeBLj9DADFTO_ewUpqk5Dm';
-  link.download = 'Lista_Trabalhos_Inscritos_IV_Feira_Ciencias_IFFar.pdf';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  fecharPopupLista();
-}
-function fecharPopupLista(){
-  document.getElementById('popupLista').classList.remove('open');
-  sessionStorage.setItem('popupListaFechado','1');
-}
-document.getElementById('popupLista').addEventListener('click',function(e){
-  if(e.target===this)fecharPopupLista();
-});
-// Mostrar popup ao carregar (uma vez por sessão)
-window.addEventListener('load',function(){
-  if(!sessionStorage.getItem('popupListaFechado')){
-    setTimeout(function(){
-      document.getElementById('popupLista').classList.add('open');
-    },800);
-  }
-});
-
 renderAnais();
 }
 function removerTrabalho(i){if(confirm('Remover este trabalho?')){trabalhosAdmin.splice(i,1);localStorage.setItem('trabalhosAdmin',JSON.stringify(trabalhosAdmin));
-// ── POPUP LISTA DE TRABALHOS ──
-function baixarListaEFechar(){
-  // Inicia download automático
-  const link = document.createElement('a');
-  link.href = 'https://drive.google.com/uc?export=download&id=1K75RQliakwgeBLj9DADFTO_ewUpqk5Dm';
-  link.download = 'Lista_Trabalhos_Inscritos_IV_Feira_Ciencias_IFFar.pdf';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  fecharPopupLista();
-}
-function fecharPopupLista(){
-  document.getElementById('popupLista').classList.remove('open');
-  sessionStorage.setItem('popupListaFechado','1');
-}
-document.getElementById('popupLista').addEventListener('click',function(e){
-  if(e.target===this)fecharPopupLista();
-});
-// Mostrar popup ao carregar (uma vez por sessão)
-window.addEventListener('load',function(){
-  if(!sessionStorage.getItem('popupListaFechado')){
-    setTimeout(function(){
-      document.getElementById('popupLista').classList.add('open');
-    },800);
-  }
-});
-
 renderAnais();}}
 function verResumo(i){const t=getTodos()[i];document.getElementById('resumoTitulo').textContent=t.titulo;document.getElementById('resumoTexto').textContent=t.resumo;document.getElementById('resumoOverlay').classList.add('open');}
 function fecharResumo(){document.getElementById('resumoOverlay').classList.remove('open');}
@@ -1882,33 +1747,6 @@ function abrirSenha(){
 function verificarSenha(){
   const s=document.getElementById('senha-input').value;
   if(s===SENHA_ADMIN){window._adminLogado=true;document.getElementById('senhaModal').classList.remove('open');document.getElementById('senha-input').value='';document.getElementById('senha-erro').classList.remove('show');document.getElementById('anais-add-btn').style.display='flex';document.getElementById('lock-icon').textContent='🔓';document.getElementById('lock-text').textContent='Administrador conectado — clique para sair';document.getElementById('anais-lock').classList.add('unlocked');
-// ── POPUP LISTA DE TRABALHOS ──
-function baixarListaEFechar(){
-  // Inicia download automático
-  const link = document.createElement('a');
-  link.href = 'https://drive.google.com/uc?export=download&id=1K75RQliakwgeBLj9DADFTO_ewUpqk5Dm';
-  link.download = 'Lista_Trabalhos_Inscritos_IV_Feira_Ciencias_IFFar.pdf';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  fecharPopupLista();
-}
-function fecharPopupLista(){
-  document.getElementById('popupLista').classList.remove('open');
-  sessionStorage.setItem('popupListaFechado','1');
-}
-document.getElementById('popupLista').addEventListener('click',function(e){
-  if(e.target===this)fecharPopupLista();
-});
-// Mostrar popup ao carregar (uma vez por sessão)
-window.addEventListener('load',function(){
-  if(!sessionStorage.getItem('popupListaFechado')){
-    setTimeout(function(){
-      document.getElementById('popupLista').classList.add('open');
-    },800);
-  }
-});
-
 renderAnais();}
   else{document.getElementById('senha-erro').classList.add('show');document.getElementById('senha-input').value='';document.getElementById('senha-input').focus();}
 }
@@ -1922,15 +1760,13 @@ document.getElementById('modalOverlay').addEventListener('click',function(e){if(
 document.getElementById('resumoOverlay').addEventListener('click',function(e){if(e.target===this)fecharResumo();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){fecharPopupTrabalhos();fecharModal();fecharResumo();fecharSenha();}});
 
+renderAnais();
+
+
+
 // ── POPUP LISTA DE TRABALHOS ──
 function baixarListaEFechar(){
-  // Inicia download automático
-  const link = document.createElement('a');
-  link.href = 'https://drive.google.com/uc?export=download&id=1K75RQliakwgeBLj9DADFTO_ewUpqk5Dm';
-  link.download = 'Lista_Trabalhos_Inscritos_IV_Feira_Ciencias_IFFar.pdf';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  window.open('https://drive.google.com/uc?export=download&id=1K75RQliakwgeBLj9DADFTO_ewUpqk5Dm','_blank');
   fecharPopupLista();
 }
 function fecharPopupLista(){
@@ -1938,19 +1774,16 @@ function fecharPopupLista(){
   sessionStorage.setItem('popupListaFechado','1');
 }
 document.getElementById('popupLista').addEventListener('click',function(e){
-  if(e.target===this)fecharPopupLista();
+  if(e.target===this) fecharPopupLista();
 });
-// Mostrar popup ao carregar (uma vez por sessão)
-window.addEventListener('load',function(){
+// Abrir popup automaticamente ao carregar (uma vez por sessão)
+window.addEventListener('load', function(){
   if(!sessionStorage.getItem('popupListaFechado')){
     setTimeout(function(){
       document.getElementById('popupLista').classList.add('open');
-    },800);
+    }, 800);
   }
 });
-
-renderAnais();
-
 </script>
 </body>
 </html>

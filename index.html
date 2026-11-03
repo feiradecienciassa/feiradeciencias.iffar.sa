@@ -557,9 +557,9 @@ footer strong{color:#fff;}
 <div class="popup-lista-destaque">
 📅 A lista de trabalhos <strong>aprovados</strong> será publicada no dia <strong>05/11/2026</strong>
 </div>
-<a class="popup-lista-btn" href="https://drive.google.com/uc?export=download&id=1K75RQliakwgeBLj9DADFTO_ewUpqk5Dm" target="_blank" onclick="fecharPopupLista()">
+<button class="popup-lista-btn" onclick="baixarListaEFechar()">
 ⬇️ Baixar Lista de Trabalhos Inscritos (PDF)
-</a>
+</button>
 <button class="popup-lista-fechar" onclick="fecharPopupLista()">Fechar este aviso</button>
 </div>
 </div>
@@ -1684,6 +1684,16 @@ function renderAnais() {
 }
 function filtrarAnais(cat,btn){filtroAtual=cat;document.querySelectorAll('.anais-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
 // ── POPUP LISTA DE TRABALHOS ──
+function baixarListaEFechar(){
+  // Inicia download automático
+  const link = document.createElement('a');
+  link.href = 'https://drive.google.com/uc?export=download&id=1K75RQliakwgeBLj9DADFTO_ewUpqk5Dm';
+  link.download = 'Lista_Trabalhos_Inscritos_IV_Feira_Ciencias_IFFar.pdf';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  fecharPopupLista();
+}
 function fecharPopupLista(){
   document.getElementById('popupLista').classList.remove('open');
   sessionStorage.setItem('popupListaFechado','1');
@@ -1703,6 +1713,16 @@ window.addEventListener('load',function(){
 renderAnais();}
 function pesquisarAnais(val){buscaAtual=val;
 // ── POPUP LISTA DE TRABALHOS ──
+function baixarListaEFechar(){
+  // Inicia download automático
+  const link = document.createElement('a');
+  link.href = 'https://drive.google.com/uc?export=download&id=1K75RQliakwgeBLj9DADFTO_ewUpqk5Dm';
+  link.download = 'Lista_Trabalhos_Inscritos_IV_Feira_Ciencias_IFFar.pdf';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  fecharPopupLista();
+}
 function fecharPopupLista(){
   document.getElementById('popupLista').classList.remove('open');
   sessionStorage.setItem('popupListaFechado','1');
@@ -1722,6 +1742,16 @@ window.addEventListener('load',function(){
 renderAnais();}
 function limparPesquisa(){document.getElementById('anais-search').value='';buscaAtual='';
 // ── POPUP LISTA DE TRABALHOS ──
+function baixarListaEFechar(){
+  // Inicia download automático
+  const link = document.createElement('a');
+  link.href = 'https://drive.google.com/uc?export=download&id=1K75RQliakwgeBLj9DADFTO_ewUpqk5Dm';
+  link.download = 'Lista_Trabalhos_Inscritos_IV_Feira_Ciencias_IFFar.pdf';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  fecharPopupLista();
+}
 function fecharPopupLista(){
   document.getElementById('popupLista').classList.remove('open');
   sessionStorage.setItem('popupListaFechado','1');
@@ -1783,6 +1813,16 @@ function salvarTrabalho(){
   localStorage.setItem('trabalhosAdmin',JSON.stringify(trabalhosAdmin));
   fecharModal();
 // ── POPUP LISTA DE TRABALHOS ──
+function baixarListaEFechar(){
+  // Inicia download automático
+  const link = document.createElement('a');
+  link.href = 'https://drive.google.com/uc?export=download&id=1K75RQliakwgeBLj9DADFTO_ewUpqk5Dm';
+  link.download = 'Lista_Trabalhos_Inscritos_IV_Feira_Ciencias_IFFar.pdf';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  fecharPopupLista();
+}
 function fecharPopupLista(){
   document.getElementById('popupLista').classList.remove('open');
   sessionStorage.setItem('popupListaFechado','1');
@@ -1803,6 +1843,16 @@ renderAnais();
 }
 function removerTrabalho(i){if(confirm('Remover este trabalho?')){trabalhosAdmin.splice(i,1);localStorage.setItem('trabalhosAdmin',JSON.stringify(trabalhosAdmin));
 // ── POPUP LISTA DE TRABALHOS ──
+function baixarListaEFechar(){
+  // Inicia download automático
+  const link = document.createElement('a');
+  link.href = 'https://drive.google.com/uc?export=download&id=1K75RQliakwgeBLj9DADFTO_ewUpqk5Dm';
+  link.download = 'Lista_Trabalhos_Inscritos_IV_Feira_Ciencias_IFFar.pdf';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  fecharPopupLista();
+}
 function fecharPopupLista(){
   document.getElementById('popupLista').classList.remove('open');
   sessionStorage.setItem('popupListaFechado','1');
@@ -1833,6 +1883,16 @@ function verificarSenha(){
   const s=document.getElementById('senha-input').value;
   if(s===SENHA_ADMIN){window._adminLogado=true;document.getElementById('senhaModal').classList.remove('open');document.getElementById('senha-input').value='';document.getElementById('senha-erro').classList.remove('show');document.getElementById('anais-add-btn').style.display='flex';document.getElementById('lock-icon').textContent='🔓';document.getElementById('lock-text').textContent='Administrador conectado — clique para sair';document.getElementById('anais-lock').classList.add('unlocked');
 // ── POPUP LISTA DE TRABALHOS ──
+function baixarListaEFechar(){
+  // Inicia download automático
+  const link = document.createElement('a');
+  link.href = 'https://drive.google.com/uc?export=download&id=1K75RQliakwgeBLj9DADFTO_ewUpqk5Dm';
+  link.download = 'Lista_Trabalhos_Inscritos_IV_Feira_Ciencias_IFFar.pdf';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  fecharPopupLista();
+}
 function fecharPopupLista(){
   document.getElementById('popupLista').classList.remove('open');
   sessionStorage.setItem('popupListaFechado','1');
@@ -1863,6 +1923,16 @@ document.getElementById('resumoOverlay').addEventListener('click',function(e){if
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){fecharPopupTrabalhos();fecharModal();fecharResumo();fecharSenha();}});
 
 // ── POPUP LISTA DE TRABALHOS ──
+function baixarListaEFechar(){
+  // Inicia download automático
+  const link = document.createElement('a');
+  link.href = 'https://drive.google.com/uc?export=download&id=1K75RQliakwgeBLj9DADFTO_ewUpqk5Dm';
+  link.download = 'Lista_Trabalhos_Inscritos_IV_Feira_Ciencias_IFFar.pdf';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  fecharPopupLista();
+}
 function fecharPopupLista(){
   document.getElementById('popupLista').classList.remove('open');
   sessionStorage.setItem('popupListaFechado','1');

@@ -443,14 +443,9 @@ footer strong{color:#fff;}
 <div class="anais-search-box"><span class="search-icon">🔍</span><input id="anais-search" type="text" placeholder="Pesquisar por título, autor ou orientador..." oninput="pesquisarAnais(this.value)"/><button class="anais-search-clear" onclick="limparPesquisa()">✕</button></div>
 <span class="anais-search-info" id="search-info"></span>
 </div>
-<div class="anais-controls">
-<button class="anais-btn active" onclick="filtrarAnais('todos',this)">📋 Todos</button>
-<button class="anais-btn" onclick="filtrarAnais('fundamental',this)">📚 Ensino Fundamental</button>
-<button class="anais-btn" onclick="filtrarAnais('medio',this)">🎓 Ensino Médio</button>
-<button class="anais-btn" onclick="filtrarAnais('superior',this)">🏛️ Ensino Superior</button>
-</div>
+
 <div class="anais-table-wrap"><table class="anais-table" id="anaisTable">
-<thead><tr><th>#</th><th>Título do Trabalho</th><th>Autores</th><th>Orientador(a)</th><th>Escola</th><th>Categoria</th><th>Ações</th></tr></thead>
+<thead><tr><th>#</th><th>Título do Trabalho</th><th>Autores</th><th>Orientador(a)</th><th>Escola</th><th>Ações</th></tr></thead>
 <tbody id="anaisBody"></tbody>
 </table></div>
 </div></section>
@@ -537,18 +532,36 @@ footer strong{color:#fff;}
 </div>
 <div class="popup-trabalhos-search">
 <div class="popup-search-box"><span>🔍</span><input type="text" id="popup-search-input" placeholder="Pesquisar por título, autor ou escola..." oninput="filtrarPopup()"/></div>
-<div class="popup-filter-btns">
-<button class="popup-filter-btn active" onclick="setPopupCat('todos',this)">Todos</button>
-<button class="popup-filter-btn" onclick="setPopupCat('fundamental',this)">📚 Fundamental</button>
-<button class="popup-filter-btn" onclick="setPopupCat('medio',this)">🎓 Médio</button>
-<button class="popup-filter-btn" onclick="setPopupCat('superior',this)">🏛️ Superior</button>
-</div>
+
 </div>
 <div class="popup-trabalhos-body">
-<table class="popup-trabalhos-table"><thead><tr><th>#</th><th>Título do Trabalho</th><th>Autores</th><th>Escola</th><th>Categoria</th></tr></thead>
+<table class="popup-trabalhos-table"><thead><tr><th>#</th><th>Título do Trabalho</th><th>Autores</th><th>Escola</th></tr></thead>
 <tbody id="popup-tbody"></tbody></table>
 </div>
 <div class="popup-trabalhos-footer"><span id="popup-info-footer"></span><button onclick="fecharPopupTrabalhos()">Fechar</button></div>
+</div>
+</div>
+
+
+<!-- POPUP LISTA DE TRABALHOS -->
+<div class="popup-lista-overlay" id="popupLista">
+<div class="popup-lista-box">
+<div class="popup-lista-header">
+<h3>📋 IV Feira de Ciências – IFFar 2026</h3>
+<p>Campus Santo Augusto · 24 de novembro de 2026</p>
+</div>
+<div class="popup-lista-body">
+<div class="popup-lista-icon">🔬</div>
+<h4>Confira a lista de trabalhos inscritos!</h4>
+<p>Clique no botão abaixo para baixar o PDF com todos os trabalhos inscritos na IV Feira de Ciências do IFFar – Campus Santo Augusto.</p>
+<div class="popup-lista-destaque">
+📅 A lista de trabalhos <strong>aprovados</strong> será publicada no dia <strong>05/11/2026</strong>
+</div>
+<a class="popup-lista-btn" href="https://drive.google.com/uc?export=download&id=1K75RQliakwgeBLj9DADFTO_ewUpqk5Dm" target="_blank" onclick="fecharPopupLista()">
+⬇️ Baixar Lista de Trabalhos Inscritos (PDF)
+</a>
+<button class="popup-lista-fechar" onclick="fecharPopupLista()">Fechar este aviso</button>
+</div>
 </div>
 </div>
 
@@ -1665,14 +1678,67 @@ function renderAnais() {
       <td style="font-size:0.8rem">${t.autores}</td>
       <td style="font-size:0.8rem">${t.orientador||'—'}</td>
       <td style="font-size:0.8rem">${t.escola||'—'}</td>
-      <td>${badges[t.categoria]||t.categoria}</td>
       <td>${t.resumo?`<button class="btn-resumo" onclick="verResumo(${i})">📝 Resumo</button>`:''}${t.pdfUrl?`<a href="${t.pdfUrl}" target="_blank" class="btn-resumo" style="text-decoration:none">📄 PDF</a>`:''}</td>
     </tr>
   `).join('');
 }
-function filtrarAnais(cat,btn){filtroAtual=cat;document.querySelectorAll('.anais-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderAnais();}
-function pesquisarAnais(val){buscaAtual=val;renderAnais();}
-function limparPesquisa(){document.getElementById('anais-search').value='';buscaAtual='';renderAnais();}
+function filtrarAnais(cat,btn){filtroAtual=cat;document.querySelectorAll('.anais-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+// ── POPUP LISTA DE TRABALHOS ──
+function fecharPopupLista(){
+  document.getElementById('popupLista').classList.remove('open');
+  sessionStorage.setItem('popupListaFechado','1');
+}
+document.getElementById('popupLista').addEventListener('click',function(e){
+  if(e.target===this)fecharPopupLista();
+});
+// Mostrar popup ao carregar (uma vez por sessão)
+window.addEventListener('load',function(){
+  if(!sessionStorage.getItem('popupListaFechado')){
+    setTimeout(function(){
+      document.getElementById('popupLista').classList.add('open');
+    },800);
+  }
+});
+
+renderAnais();}
+function pesquisarAnais(val){buscaAtual=val;
+// ── POPUP LISTA DE TRABALHOS ──
+function fecharPopupLista(){
+  document.getElementById('popupLista').classList.remove('open');
+  sessionStorage.setItem('popupListaFechado','1');
+}
+document.getElementById('popupLista').addEventListener('click',function(e){
+  if(e.target===this)fecharPopupLista();
+});
+// Mostrar popup ao carregar (uma vez por sessão)
+window.addEventListener('load',function(){
+  if(!sessionStorage.getItem('popupListaFechado')){
+    setTimeout(function(){
+      document.getElementById('popupLista').classList.add('open');
+    },800);
+  }
+});
+
+renderAnais();}
+function limparPesquisa(){document.getElementById('anais-search').value='';buscaAtual='';
+// ── POPUP LISTA DE TRABALHOS ──
+function fecharPopupLista(){
+  document.getElementById('popupLista').classList.remove('open');
+  sessionStorage.setItem('popupListaFechado','1');
+}
+document.getElementById('popupLista').addEventListener('click',function(e){
+  if(e.target===this)fecharPopupLista();
+});
+// Mostrar popup ao carregar (uma vez por sessão)
+window.addEventListener('load',function(){
+  if(!sessionStorage.getItem('popupListaFechado')){
+    setTimeout(function(){
+      document.getElementById('popupLista').classList.add('open');
+    },800);
+  }
+});
+
+renderAnais();}
 let popupCatAtual='todos';
 function abrirPopupTrabalhos(){
   document.getElementById('popupTrabalhos').classList.add('open');
@@ -1698,7 +1764,7 @@ function renderPopup(){
   document.getElementById('popup-info-footer').textContent='Exibindo '+lista.length+' de '+total+' trabalhos';
   const tbody=document.getElementById('popup-tbody');
   if(!lista.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--texto-claro)">Nenhum trabalho encontrado.</td></tr>';return;}
-  tbody.innerHTML=lista.map((t,i)=>`<tr><td>${t.num||(i+1)}</td><td><strong>${t.titulo}</strong></td><td style="font-size:0.8rem">${t.autores}</td><td style="font-size:0.8rem">${t.escola||'—'}</td><td>${badges[t.categoria]||t.categoria}</td></tr>`).join('');
+  tbody.innerHTML=lista.map((t,i)=>`<tr><td>${t.num||(i+1)}</td><td><strong>${t.titulo}</strong></td><td style="font-size:0.8rem">${t.autores}</td><td style="font-size:0.8rem">${t.escola||'—'}</td></tr>`).join('');
 }
 function abrirModal(){document.getElementById('modalOverlay').classList.add('open');}
 function fecharModal(){document.getElementById('modalOverlay').classList.remove('open');['f-titulo','f-autores','f-orientador','f-escola','f-resumo','f-pdf'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('f-categoria').value='';}
@@ -1715,9 +1781,45 @@ function salvarTrabalho(){
   if(pdf){const m=pdf.match(/\/d\/([a-zA-Z0-9_-]+)/);if(m)pdfUrl='https://drive.google.com/file/d/'+m[1]+'/preview';else pdfUrl=pdf;}
   trabalhosAdmin.push({titulo,autores,orientador,escola,categoria,resumo,pdfUrl});
   localStorage.setItem('trabalhosAdmin',JSON.stringify(trabalhosAdmin));
-  fecharModal();renderAnais();
+  fecharModal();
+// ── POPUP LISTA DE TRABALHOS ──
+function fecharPopupLista(){
+  document.getElementById('popupLista').classList.remove('open');
+  sessionStorage.setItem('popupListaFechado','1');
 }
-function removerTrabalho(i){if(confirm('Remover este trabalho?')){trabalhosAdmin.splice(i,1);localStorage.setItem('trabalhosAdmin',JSON.stringify(trabalhosAdmin));renderAnais();}}
+document.getElementById('popupLista').addEventListener('click',function(e){
+  if(e.target===this)fecharPopupLista();
+});
+// Mostrar popup ao carregar (uma vez por sessão)
+window.addEventListener('load',function(){
+  if(!sessionStorage.getItem('popupListaFechado')){
+    setTimeout(function(){
+      document.getElementById('popupLista').classList.add('open');
+    },800);
+  }
+});
+
+renderAnais();
+}
+function removerTrabalho(i){if(confirm('Remover este trabalho?')){trabalhosAdmin.splice(i,1);localStorage.setItem('trabalhosAdmin',JSON.stringify(trabalhosAdmin));
+// ── POPUP LISTA DE TRABALHOS ──
+function fecharPopupLista(){
+  document.getElementById('popupLista').classList.remove('open');
+  sessionStorage.setItem('popupListaFechado','1');
+}
+document.getElementById('popupLista').addEventListener('click',function(e){
+  if(e.target===this)fecharPopupLista();
+});
+// Mostrar popup ao carregar (uma vez por sessão)
+window.addEventListener('load',function(){
+  if(!sessionStorage.getItem('popupListaFechado')){
+    setTimeout(function(){
+      document.getElementById('popupLista').classList.add('open');
+    },800);
+  }
+});
+
+renderAnais();}}
 function verResumo(i){const t=getTodos()[i];document.getElementById('resumoTitulo').textContent=t.titulo;document.getElementById('resumoTexto').textContent=t.resumo;document.getElementById('resumoOverlay').classList.add('open');}
 function fecharResumo(){document.getElementById('resumoOverlay').classList.remove('open');}
 const SENHA_ADMIN='feirasa2026';
@@ -1729,7 +1831,25 @@ function abrirSenha(){
 }
 function verificarSenha(){
   const s=document.getElementById('senha-input').value;
-  if(s===SENHA_ADMIN){window._adminLogado=true;document.getElementById('senhaModal').classList.remove('open');document.getElementById('senha-input').value='';document.getElementById('senha-erro').classList.remove('show');document.getElementById('anais-add-btn').style.display='flex';document.getElementById('lock-icon').textContent='🔓';document.getElementById('lock-text').textContent='Administrador conectado — clique para sair';document.getElementById('anais-lock').classList.add('unlocked');renderAnais();}
+  if(s===SENHA_ADMIN){window._adminLogado=true;document.getElementById('senhaModal').classList.remove('open');document.getElementById('senha-input').value='';document.getElementById('senha-erro').classList.remove('show');document.getElementById('anais-add-btn').style.display='flex';document.getElementById('lock-icon').textContent='🔓';document.getElementById('lock-text').textContent='Administrador conectado — clique para sair';document.getElementById('anais-lock').classList.add('unlocked');
+// ── POPUP LISTA DE TRABALHOS ──
+function fecharPopupLista(){
+  document.getElementById('popupLista').classList.remove('open');
+  sessionStorage.setItem('popupListaFechado','1');
+}
+document.getElementById('popupLista').addEventListener('click',function(e){
+  if(e.target===this)fecharPopupLista();
+});
+// Mostrar popup ao carregar (uma vez por sessão)
+window.addEventListener('load',function(){
+  if(!sessionStorage.getItem('popupListaFechado')){
+    setTimeout(function(){
+      document.getElementById('popupLista').classList.add('open');
+    },800);
+  }
+});
+
+renderAnais();}
   else{document.getElementById('senha-erro').classList.add('show');document.getElementById('senha-input').value='';document.getElementById('senha-input').focus();}
 }
 function fecharSenha(){document.getElementById('senhaModal').classList.remove('open');document.getElementById('senha-input').value='';document.getElementById('senha-erro').classList.remove('show');}
@@ -1741,6 +1861,24 @@ document.getElementById('popupTrabalhos').addEventListener('click',function(e){i
 document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)fecharModal();});
 document.getElementById('resumoOverlay').addEventListener('click',function(e){if(e.target===this)fecharResumo();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){fecharPopupTrabalhos();fecharModal();fecharResumo();fecharSenha();}});
+
+// ── POPUP LISTA DE TRABALHOS ──
+function fecharPopupLista(){
+  document.getElementById('popupLista').classList.remove('open');
+  sessionStorage.setItem('popupListaFechado','1');
+}
+document.getElementById('popupLista').addEventListener('click',function(e){
+  if(e.target===this)fecharPopupLista();
+});
+// Mostrar popup ao carregar (uma vez por sessão)
+window.addEventListener('load',function(){
+  if(!sessionStorage.getItem('popupListaFechado')){
+    setTimeout(function(){
+      document.getElementById('popupLista').classList.add('open');
+    },800);
+  }
+});
+
 renderAnais();
 
 </script>

@@ -1789,18 +1789,15 @@ function baixarListaEFechar(){
 }
 function fecharPopupLista(){
   document.getElementById('popupLista').classList.remove('open');
-  sessionStorage.setItem('popupListaFechado','1');
 }
 document.getElementById('popupLista').addEventListener('click',function(e){
   if(e.target===this) fecharPopupLista();
 });
-// Abrir popup automaticamente ao carregar (uma vez por sessão)
-window.addEventListener('load', function(){
-  if(!sessionStorage.getItem('popupListaFechado')){
-    setTimeout(function(){
-      document.getElementById('popupLista').classList.add('open');
-    }, 800);
-  }
+// Abrir popup sempre ao carregar a página
+document.addEventListener('DOMContentLoaded', function(){
+  setTimeout(function(){
+    document.getElementById('popupLista').classList.add('open');
+  }, 800);
 });
 </script>
 </body>

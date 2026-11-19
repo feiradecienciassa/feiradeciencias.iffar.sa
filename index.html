@@ -1706,7 +1706,285 @@ document.addEventListener('DOMContentLoaded', function(){
   }, 800);
 });
 </script>
-</body>
+<!-- POP-UP COM AVISO E CONTAGEM REGRESSIVA -->
+<div
+  id="popup-feira"
+  class="popup-feira"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="popup-feira-titulo"
+>
+  <div class="popup-feira-janela">
+    <button
+      class="popup-feira-fechar"
+      type="button"
+      aria-label="Fechar aviso"
+      onclick="fecharPopupFeira()"
+    >
+      &times;
+    </button>
+
+    <h2 id="popup-feira-titulo">IV Feira de Ciências</h2>
+
+    <div class="contagem-area">
+      <p class="contagem-chamada">Contagem regressiva para o evento</p>
+
+      <div id="contagem-feira" class="contagem-feira">
+        <div class="contagem-item">
+          <strong id="dias">00</strong>
+          <span>Dias</span>
+        </div>
+
+        <div class="contagem-item">
+          <strong id="horas">00</strong>
+          <span>Horas</span>
+        </div>
+
+        <div class="contagem-item">
+          <strong id="minutos">00</strong>
+          <span>Minutos</span>
+        </div>
+
+        <div class="contagem-item">
+          <strong id="segundos">00</strong>
+          <span>Segundos</span>
+        </div>
+      </div>
+
+      <p id="mensagem-contagem" class="mensagem-contagem">
+        Terça-feira, 24/11/2026, às 8h
+      </p>
+    </div>
+
+    <img
+      class="popup-feira-imagem"
+      src="aviso-feira-24.png"
+      alt="Aviso da IV Feira de Ciências do IFFar Campus Santo Augusto. Evento no dia 24 de novembro, das 8h às 11h30 e das 13h às 15h."
+    >
+  </div>
+</div>
+
+<style>
+  body.popup-aberto {
+    overflow: hidden;
+  }
+
+  .popup-feira {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.78);
+    box-sizing: border-box;
+  }
+
+  .popup-feira-janela {
+    position: relative;
+    width: min(92vw, 720px);
+    max-height: 94vh;
+    overflow-y: auto;
+    padding: 18px;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.45);
+    box-sizing: border-box;
+  }
+
+  .popup-feira-janela h2 {
+    margin: 0 50px 12px;
+    color: #176b38;
+    font-size: clamp(22px, 4vw, 34px);
+    text-align: center;
+  }
+
+  .popup-feira-fechar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    width: 44px;
+    height: 44px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    background: #c62828;
+    color: #ffffff;
+    font-size: 30px;
+    font-weight: bold;
+    line-height: 36px;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  .popup-feira-fechar:hover,
+  .popup-feira-fechar:focus {
+    background: #8e0000;
+    outline: 3px solid #ffdf00;
+  }
+
+  .contagem-area {
+    margin-bottom: 16px;
+    padding: 14px;
+    border-radius: 14px;
+    background: #176b38;
+    color: #ffffff;
+    text-align: center;
+  }
+
+  .contagem-chamada {
+    margin: 0 0 10px;
+    font-size: clamp(17px, 3vw, 23px);
+    font-weight: bold;
+  }
+
+  .contagem-feira {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+
+  .contagem-item {
+    padding: 10px 5px;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #176b38;
+  }
+
+  .contagem-item strong {
+    display: block;
+    font-size: clamp(25px, 5vw, 42px);
+    line-height: 1;
+  }
+
+  .contagem-item span {
+    display: block;
+    margin-top: 5px;
+    color: #333333;
+    font-size: clamp(11px, 2vw, 15px);
+    font-weight: bold;
+  }
+
+  .mensagem-contagem {
+    margin: 10px 0 0;
+    font-size: clamp(14px, 2.5vw, 18px);
+    font-weight: bold;
+  }
+
+  .popup-feira-imagem {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 62vh;
+    object-fit: contain;
+    border-radius: 12px;
+  }
+
+  @media (max-width: 520px) {
+    .popup-feira {
+      padding: 8px;
+    }
+
+    .popup-feira-janela {
+      width: 96vw;
+      max-height: 96vh;
+      padding: 12px;
+    }
+
+    .popup-feira-janela h2 {
+      margin-left: 35px;
+      margin-right: 35px;
+    }
+
+    .contagem-area {
+      padding: 10px 6px;
+    }
+
+    .contagem-feira {
+      gap: 4px;
+    }
+
+    .contagem-item {
+      padding: 8px 2px;
+    }
+
+    .popup-feira-fechar {
+      top: 6px;
+      right: 6px;
+      width: 40px;
+      height: 40px;
+    }
+  }
+</style>
+
+<script>
+  const dataEvento = new Date("2026-11-24T08:00:00-03:00");
+
+  const elementoDias = document.getElementById("dias");
+  const elementoHoras = document.getElementById("horas");
+  const elementoMinutos = document.getElementById("minutos");
+  const elementoSegundos = document.getElementById("segundos");
+  const mensagemContagem = document.getElementById("mensagem-contagem");
+  const contagemFeira = document.getElementById("contagem-feira");
+  const popupFeira = document.getElementById("popup-feira");
+
+  document.body.classList.add("popup-aberto");
+
+  function formatarNumero(numero) {
+    return String(numero).padStart(2, "0");
+  }
+
+  function atualizarContagemFeira() {
+    const agora = new Date();
+    const distancia = dataEvento.getTime() - agora.getTime();
+
+    if (distancia <= 0) {
+      clearInterval(intervaloContagem);
+
+      contagemFeira.style.display = "none";
+      mensagemContagem.textContent =
+        "A IV Feira de Ciências começou! Esperamos você.";
+      return;
+    }
+
+    const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+    const horas = Math.floor(
+      (distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    const minutos = Math.floor(
+      (distancia % (1000 * 60 * 60)) / (1000 * 60)
+    );
+    const segundos = Math.floor(
+      (distancia % (1000 * 60)) / 1000
+    );
+
+    elementoDias.textContent = formatarNumero(dias);
+    elementoHoras.textContent = formatarNumero(horas);
+    elementoMinutos.textContent = formatarNumero(minutos);
+    elementoSegundos.textContent = formatarNumero(segundos);
+  }
+
+  function fecharPopupFeira() {
+    popupFeira.style.display = "none";
+    document.body.classList.remove("popup-aberto");
+  }
+
+  popupFeira.addEventListener("click", function (evento) {
+    if (evento.target === popupFeira) {
+      fecharPopupFeira();
+    }
+  });
+
+  document.addEventListener("keydown", function (evento) {
+    if (evento.key === "Escape") {
+      fecharPopupFeira();
+    }
+  });
+
+  atualizarContagemFeira();
+  const intervaloContagem = setInterval(atualizarContagemFeira, 1000);
+</script></body>
 </html>
 
 </body>

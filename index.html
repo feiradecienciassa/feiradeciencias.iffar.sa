@@ -310,7 +310,15 @@ footer strong{color:#fff;}
 @media(max-width:900px){ .navbar-logos img { height: 30px; } }
 @media(max-width:480px){ .navbar-logos { gap: 8px; } .navbar-logos img { height: 26px; } }
 </style>
-</head>
+<style>
+  /* Desativa definitivamente o pop-up antigo */
+  #popupLista,
+  .popup-lista-overlay {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+</style></head>
 <body>
 
 <!-- NAVBAR -->
@@ -1758,7 +1766,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     <img
       class="popup-feira-imagem"
-      src="aviso-feira-24.png"
+     src="Aviso - feira - 24.png"
       alt="Aviso da IV Feira de Ciências do IFFar Campus Santo Augusto. Evento no dia 24 de novembro, das 8h às 11h30 e das 13h às 15h."
     >
   </div>
